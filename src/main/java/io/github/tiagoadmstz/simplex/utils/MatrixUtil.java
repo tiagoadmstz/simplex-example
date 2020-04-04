@@ -1,31 +1,47 @@
 package io.github.tiagoadmstz.simplex.utils;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class MatrixUtil {
 
-    private final List<String> lines;
-
-    public MatrixUtil(List<String> lines) {
-        this.lines = lines;
+    public Object[][] mountColumnsNames(Object[][] columnsNames, Integer quantVariaveis, Integer quantFolgas) {
+        int count = 0;
+        for (String variavel : mountVariaveis(quantVariaveis)) columnsNames[0][count++] = variavel;
+        List<String> folgas = mountFolgas(quantFolgas);
+        for (String folga : folgas) if (!"Z".equals(folga)) columnsNames[0][count++] = folga;
+        count = 1;
+        for (String folga : folgas) columnsNames[count++][0] = folga;
+        return columnsNames;
     }
 
-    public Integer[] getVariablesAndRestrictions() {
-        return Stream.of(lines.get(0).split("\\s+")).map(Integer::parseInt).toArray(Integer[]::new);
+    public boolean zRowContainNegativeNumber(Object[][] matrix) {
+        return Stream.of(matrix[1])
+                .filter(f -> f instanceof BigDecimal)
+                .map(number -> (BigDecimal) number)
+                .anyMatch(number -> number.floatValue() < 0);
     }
 
-    public Float[] getCoeficientes() {
-        return Stream.of(Stream.of(lines.get(2), lines.get(3), lines.get(4), lines.get(5)).collect(Collectors.joining(" ")).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    private List<String> mountVariaveis(int quantVariaveis) {
+        return IntStream.rangeClosed(0, quantVariaveis).boxed().map(i -> i == 0 ? "" : "X" + i).collect(Collectors.toList());
     }
 
-    public Float[] getDemandas() {
-        return Stream.of(lines.get(7).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    private List<String> mountFolgas(int quantFolgas) {
+        return IntStream.rangeClosed(0, quantFolgas).boxed().map(i -> i == 0 ? "Z" : "F" + i).collect(Collectors.toList());
     }
 
-    public Float[] getCustosVariaveis() {
-        return Stream.of(lines.get(8).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    public void iterateBidimencionalArray(Object[][] matrix, Consumer consumer) {
+        if (matrix != null) {
+            for (int row = 0; row < matrix.length; row++) {
+                for (int column = 0; column < matrix[0].length; column++) {
+                    consumer.accept(matrix[row][column]);
+                }
+            }
+        }
     }
 
 }

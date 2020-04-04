@@ -33,22 +33,22 @@ public class PrintUtil {
         return cabecalho;
     }
 
-    public String stringProblemaProgramacaoLinear(BigDecimal[][] matrix) {
+    public String stringProblemaProgramacaoLinear(Object[][] matrix) {
         String z = "\n|  Z  ";
-        for (int column = 0; column < matrix[0].length; column++) {
-            z += String.format(matrix[0][column].floatValue() < 0 ? "| %s " : columnStr,
-                    matrix[0][column].floatValue() < 10 ? matrix[0][column] + " " : matrix[0][column]);
+        for (int column = 1; column < matrix[0].length; column++) {
+            z += String.format(((BigDecimal) matrix[1][column]).floatValue() < 0 ? "| %s " : columnStr,
+                    ((BigDecimal) matrix[1][column]).floatValue() < 10 ? matrix[1][column] + " " : matrix[1][column]);
         }
         return z + "|\n" + lineStr.replaceAll("_", "-");
     }
 
-    public String stringRestricoes(BigDecimal[][] matrix) {
+    public String stringRestricoes(Object[][] matrix) {
         String r = "";
         for (int f = 1; f <= quantFolgas; f++) {
             r += "\n|  F" + f + " ";
-            for (int column = 0; column < matrix[0].length; column++) {
-                r += String.format(matrix[f][column].intValue() < 10 ? "|   %s  "
-                                : matrix[f][column].intValue() < 100 ? columnStr : "|  %s ",
+            for (int column = 1; column < matrix[0].length; column++) {
+                r += String.format(((BigDecimal) matrix[f][column]).intValue() < 10 ? "|   %s  "
+                                : ((BigDecimal) matrix[f][column]).intValue() < 100 ? columnStr : "|  %s ",
                         matrix[f][column]);
             }
             r += "|\n" + lineStr.replaceAll("_", "-");

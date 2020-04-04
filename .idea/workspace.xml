@@ -2,15 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="496fc176-7822-4476-bc7b-329617632730" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/models/SimplexMatrix.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/FileUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/MatrixUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/PrintUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/Simplex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/Simplex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/io/github/tiagoadmstz/simplex/Simplex$SimplexMatrix.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/models/SimplexMatrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/models/SimplexMatrix.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/FileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/FileUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/MatrixUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/MatrixUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/PrintUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/github/tiagoadmstz/simplex/utils/PrintUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/io/github/tiagoadmstz/simplex/Simplex.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/github/tiagoadmstz/simplex/Simplex.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +69,7 @@
   <component name="RunManager">
     <configuration name="Simplex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="io.github.tiagoadmstz.simplex.Simplex" />
-      <module name="simplex" />
+      <module name="simplex-example" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="io.github.tiagoadmstz.simplex.models.*" />
@@ -105,26 +104,67 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="275" y="41" key="#Project_Structure/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585939009821" />
-    <state x="488" y="99" key="#com.intellij.ide.util.MemberChooser" timestamp="1585940482561">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="397" y="3" width="587" height="731" key="#Simplex" timestamp="1585958515925">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="397" y="3" width="587" height="731" key="#Simplex/0.0.1366.738@0.0.1366.738" timestamp="1585958515925" />
+    <state x="488" y="95" key="#com.intellij.ide.util.MemberChooser" timestamp="1585950246773">
+      <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="488" y="99" key="#com.intellij.ide.util.MemberChooser/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585940482561" />
-    <state width="1322" height="555" key="GridCell.Tab.0.bottom" timestamp="1585940289392">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="488" y="95" key="#com.intellij.ide.util.MemberChooser/0.0.1366.738@0.0.1366.738" timestamp="1585950246773" />
+    <state x="526" y="258" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585949407863">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="526" y="258" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.738@0.0.1366.738" timestamp="1585949407863" />
+    <state x="363" y="97" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1585952550005">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="363" y="97" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.738@0.0.1366.738" timestamp="1585952550005" />
+    <state x="91" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1585957439519">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="91" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.738@0.0.1366.738" timestamp="1585957439519" />
+    <state width="456" height="618" key="DebuggerActiveHint" timestamp="1585964203686">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="456" height="618" key="DebuggerActiveHint/0.0.1366.738@0.0.1366.738" timestamp="1585964203686" />
+    <state width="1323" height="205" key="GridCell.Tab.0.bottom" timestamp="1585964209936">
+      <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state width="1322" height="555" key="GridCell.Tab.0.bottom/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585940289392" />
-    <state width="1322" height="555" key="GridCell.Tab.0.center" timestamp="1585940289392">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1323" height="205" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1585964209936" />
+    <state width="1323" height="205" key="GridCell.Tab.0.center" timestamp="1585964209936">
+      <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state width="1322" height="555" key="GridCell.Tab.0.center/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585940289392" />
-    <state width="1322" height="555" key="GridCell.Tab.0.left" timestamp="1585940289392">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1323" height="205" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1585964209936" />
+    <state width="1323" height="205" key="GridCell.Tab.0.left" timestamp="1585964209936">
+      <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state width="1322" height="555" key="GridCell.Tab.0.left/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585940289392" />
-    <state width="1322" height="555" key="GridCell.Tab.0.right" timestamp="1585940289392">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1323" height="205" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1585964209936" />
+    <state width="1323" height="205" key="GridCell.Tab.0.right" timestamp="1585964209936">
+      <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state width="1322" height="555" key="GridCell.Tab.0.right/-1366.0.1366.768/0.0.1366.768@0.0.1366.768" timestamp="1585940289392" />
+    <state width="1323" height="205" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1585964209936" />
+    <state width="1323" height="205" key="GridCell.Tab.1.bottom" timestamp="1585964086726">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1323" height="205" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1585964086726" />
+    <state width="1323" height="205" key="GridCell.Tab.1.center" timestamp="1585964086726">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1323" height="205" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1585964086726" />
+    <state width="1323" height="205" key="GridCell.Tab.1.left" timestamp="1585964086726">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1323" height="205" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1585964086726" />
+    <state width="1323" height="205" key="GridCell.Tab.1.right" timestamp="1585964086726">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1323" height="205" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1585964086726" />
     <state x="163" y="0" key="SettingsEditor" timestamp="1585938909268">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
