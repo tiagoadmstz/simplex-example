@@ -4,7 +4,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileUtil {
@@ -25,16 +24,30 @@ public class FileUtil {
         return Stream.of(lines.get(0).split("\\s+")).map(Integer::parseInt).toArray(Integer[]::new);
     }
 
-    public Float[] getCoeficientes() {
-        return Stream.of(Stream.of(lines.get(2), lines.get(3), lines.get(4), lines.get(5)).collect(Collectors.joining(" ")).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    public Double[] getCoeficientes() {
+        List<String> matrixLines = new ArrayList();
+        for (int l = 2; l < lines.size(); l++) {
+            if ("".equals(lines.get(l).trim())) break;
+            for (String number : lines.get(l).split("\\s+")) matrixLines.add(number);
+        }
+        return matrixLines.stream().map(Double::parseDouble).toArray(Double[]::new);
     }
 
-    public Float[] getDemandas() {
-        return Stream.of(lines.get(7).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    public Double[] getDemandas() {
+        return Stream.of(lines.get(getDemandasLine()).split("\\s+")).map(Double::parseDouble).toArray(Double[]::new);
     }
 
-    public Float[] getCustosVariaveis() {
-        return Stream.of(lines.get(8).split("\\s+")).map(Float::parseFloat).toArray(Float[]::new);
+    public Double[] getCustosVariaveis() {
+        return Stream.of(lines.get(getDemandasLine() + 1).split("\\s+")).map(Double::parseDouble).toArray(Double[]::new);
+    }
+
+    private int getDemandasLine() {
+        for (int l = 2; l < lines.size(); l++) {
+            if ("".equals(lines.get(l).trim())) {
+                return ++l;
+            }
+        }
+        return 0;
     }
 
 }

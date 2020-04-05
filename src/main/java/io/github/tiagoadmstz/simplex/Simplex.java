@@ -10,13 +10,15 @@ public class Simplex {
     }
 
     public void solve() {
-        FileUtil fileUtil = new FileUtil("/Simplex2.txt");
+        FileUtil fileUtil = new FileUtil("/Simplex.txt");
         Integer[] variablesAndRestrictions = fileUtil.getVariablesAndRestrictions();
-        new SimplexMatrix(variablesAndRestrictions[0],
+        SimplexMatrix simplexMatrix = new SimplexMatrix(variablesAndRestrictions[0],
                 variablesAndRestrictions[1],
                 fileUtil.getCoeficientes(),
                 fileUtil.getCustosVariaveis(),
                 fileUtil.getDemandas());
+        simplexMatrix.calculateNewMatrix();
+        System.out.println(simplexMatrix.toString());
     }
 
 }

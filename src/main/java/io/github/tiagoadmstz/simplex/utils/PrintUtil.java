@@ -1,68 +1,67 @@
 package io.github.tiagoadmstz.simplex.utils;
 
-import java.math.BigDecimal;
+import io.github.tiagoadmstz.simplex.models.SimplexMatrix;
 
-public class PrintUtil {
+public abstract class PrintUtil {
 
-    private String lineStr = "  ___ ";
-    private String columnStr = "|  %s  ";
-    private String cabecalho = "";
-    private Integer quantVariaveis = 0;
-    private Integer quantFolgas = 0;
-
-    public PrintUtil(Integer quantVariaveis, Integer quantFolgas) {
-        this.quantVariaveis = quantVariaveis;
-        this.quantFolgas = quantFolgas;
-    }
-
-    public String stringCabecalho() {
-        if ("".equals(cabecalho)) {
-            cabecalho = "\n|     ";
-            for (int column = 0; column < quantVariaveis; column++) {
-                lineStr += column < 10 ? "  ____ " : "  _____ ";
-                cabecalho += String.format(columnStr, "X" + (column + 1));
+    public static String matrixSimplexToString(Object[][] matrix) {
+        String matrixString = "";
+        int columnLength = getGretterLabelColumnLength(matrix);
+        for (int row = 0; row < matrix.length; row++) {
+            for (int column = 0; column < matrix[0].length; column++) {
+                Object value = matrix[row][column];
+                matrixString += mountColumnString(columnLength, value.toString());
             }
-            for (int column = 0; column < quantFolgas; column++) {
-                lineStr += column < 10 ? "  ____ " : "  _____ ";
-                cabecalho += String.format(columnStr, "F" + (column + 1));
-            }
-            lineStr += "  ____  ";
-            cabecalho += "|  LD  |\n";
-            cabecalho = lineStr + cabecalho + lineStr.replaceAll("_", "-");
+            matrixString += "\n";
         }
-        return cabecalho;
+        return matrixString;
     }
 
-    public String stringProblemaProgramacaoLinear(Object[][] matrix) {
-        String z = "\n|  Z  ";
-        for (int column = 1; column < matrix[0].length; column++) {
-            z += String.format(((BigDecimal) matrix[1][column]).floatValue() < 0 ? "| %s " : columnStr,
-                    ((BigDecimal) matrix[1][column]).floatValue() < 10 ? matrix[1][column] + " " : matrix[1][column]);
+    public static String newLineToString(SimplexMatrix simplexMatrix) {
+        String newLineString = "";
+        Object[][] matrix = simplexMatrix.getMatrix();
+        Object[] newLine = simplexMatrix.getNewLine();
+        int columnLength = getGretterLabelColumnLength(matrix);
+        for (int column = 0; column < matrix[0].length; column++) {
+            newLineString += mountColumnString(columnLength, matrix[0][column].toString());
         }
-        return z + "|\n" + lineStr.replaceAll("_", "-");
+        newLineString += "\n";
+        for (int column = 0; column < matrix[0].length; column++) {
+            newLineString += mountColumnString(columnLength, newLine[column].toString());
+        }
+        return newLineString;
     }
 
-    public String stringRestricoes(Object[][] matrix) {
-        String r = "";
-        for (int f = 1; f <= quantFolgas; f++) {
-            r += "\n|  F" + f + " ";
+    public static String resultTableToString(Object[][] resultTable) {
+        String resultTableString = "";
+        for (int row = 0; row < resultTable.length; row++) {
+            resultTableString += String.format("%s = %s\n", resultTable[row][0], resultTable[row][1]);
+        }
+        return resultTableString;
+    }
+
+    private static int getGretterLabelColumnLength(Object[][] matrix) {
+        int gretter = 0;
+        for (int row = 1; row < matrix.length; row++) {
             for (int column = 1; column < matrix[0].length; column++) {
-                r += String.format(((BigDecimal) matrix[f][column]).intValue() < 10 ? "|   %s  "
-                                : ((BigDecimal) matrix[f][column]).intValue() < 100 ? columnStr : "|  %s ",
-                        matrix[f][column]);
+                Object value = matrix[row][column];
+                if (value != null) {
+                    int length = value.toString().length();
+                    if (gretter < length) {
+                        gretter = length;
+                    }
+                }
             }
-            r += "|\n" + lineStr.replaceAll("_", "-");
         }
-        return r;
+        return gretter;
     }
 
-    public String stringNewLine(BigDecimal[] newLine, String pivotColumn) {
-        if ("".equals(cabecalho)) stringCabecalho();
-        String nl = String.format("\n|  %s ", pivotColumn);
-        for (int column = 0; column < newLine.length; column++) {
-            nl += String.format("| %s ", newLine[column]);
+    private static String mountColumnString(int columnLength, String value) {
+        String baseStr = "| %s ";
+        for (int cl = 0; cl < columnLength / 2; cl++) {
+            baseStr = String.format(baseStr, " %s ");
         }
-        return cabecalho + nl + "|\n" + lineStr.replaceAll("_", "-");
+        return String.format(baseStr, !"".equals(value) ? value : " ");
     }
 
 }

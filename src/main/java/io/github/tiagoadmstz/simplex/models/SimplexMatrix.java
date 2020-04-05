@@ -2,79 +2,87 @@ package io.github.tiagoadmstz.simplex.models;
 
 import io.github.tiagoadmstz.simplex.utils.MatrixUtil;
 import io.github.tiagoadmstz.simplex.utils.PrintUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
 
 public class SimplexMatrix {
 
+    @Getter
+    @Setter
     private Integer pivotColumn = null;
+    @Getter
+    @Setter
     private BigDecimal pivotColumnValue = null;
+    @Getter
+    @Setter
     private Integer pivotLine = null;
+    @Getter
+    @Setter
     private BigDecimal pivotLineValue = null;
+    @Getter
+    @Setter
     private BigDecimal pivotNumber = null;
-    private Integer quantVariaveis = 0;
-    private Integer quantFolgas = 0;
+    @Getter
+    private final Integer variables;
+    @Getter
+    private final Integer clearances;
+    @Getter
     private Integer rows = 0;
+    @Getter
     private Integer columns = 0;
+    @Getter
     private Object[][] matrix;
-    private BigDecimal[] newLine;
-    private PrintUtil printUtil;
-    private MatrixUtil matrixUtil;
+    @Getter
+    private Object[] newLine;
+    @Getter
+    @Setter
+    private Object[][] newMatrix;
+    @Getter
+    @Setter
+    private Object[][] resultTable;
 
-    public SimplexMatrix(Integer quantVariaveis, Integer quantFolgas) {
-        this.quantVariaveis = quantVariaveis;
-        this.quantFolgas = quantFolgas;
-        initVariables();
-    }
-
-    public SimplexMatrix(Integer quantVariaveis, Integer quantFolgas, Float[] coeficientes, Float[] custosVariaveis, Float[] demandas) {
-        this.quantVariaveis = quantVariaveis;
-        this.quantFolgas = quantFolgas;
+    public SimplexMatrix(Integer variables, Integer clearances, Double[] coeficientes, Double[] custosVariaveis, Double[] demandas) {
+        this.variables = variables;
+        this.clearances = clearances;
         initVariables(coeficientes, custosVariaveis, demandas);
-        executeCalcules();
+        findKeyValues();
     }
 
-    public SimplexMatrix(Object[][] matrix, Integer quantVariaveis, Integer quantFolgas) {
+    public SimplexMatrix(Object[][] matrix, Integer variables, Integer clearances) {
         this.matrix = matrix;
         this.rows = matrix.length;
         this.columns = matrix[0].length;
-        this.newLine = new BigDecimal[columns];
-        this.quantVariaveis = quantVariaveis;
-        this.quantFolgas = quantFolgas;
-        this.printUtil = new PrintUtil(quantVariaveis, quantFolgas);
-        this.matrixUtil = new MatrixUtil();
+        this.newLine = new Object[columns];
+        this.variables = variables;
+        this.clearances = clearances;
     }
 
     private void initVariables() {
-        rows = quantFolgas + 2;
-        columns = quantVariaveis + quantFolgas + 2;
+        rows = clearances + 2;
+        columns = variables + clearances + 2;
         matrix = new Object[rows][columns];
-        newLine = new BigDecimal[columns];
-        printUtil = new PrintUtil(quantVariaveis, quantFolgas);
-        matrixUtil = new MatrixUtil();
-        matrixUtil.mountColumnsNames(matrix, quantVariaveis, quantFolgas);
+        newLine = new Object[columns];
+        MatrixUtil.mountColumnsLabels(matrix, variables, clearances);
     }
 
-    private void initVariables(Float[] coeficientes, Float[] custosVariaveis, Float[] demandas) {
+    private void initVariables(Double[] coeficientes, Double[] custosVariaveis, Double[] demandas) {
         initVariables();
-        setCoeficientesRestricoes(coeficientes);
-        setCustosVariaveis(custosVariaveis);
-        setDemandas(demandas);
+        insertCoeficientesRestricoesOnMatrix(coeficientes);
+        insertCustosVariaveisOnMatrix(custosVariaveis);
+        insertDemandasOnMatrix(demandas);
     }
 
-    public Object[][] executeCalcules() {
-        findPivotColumnValue();
-        findPivotLineValue();
-        findNewLine();
-        System.out.println(toString());
-        return recaluleMatrix();
+    public void findKeyValues() {
+        MatrixUtil.findPivotColumn(this);
+        MatrixUtil.findPivotLine(this);
+        MatrixUtil.calculateNewLine(this);
     }
 
-    public void setCustosVariaveis(Float... custoVariavel) {
+    private void insertCustosVariaveisOnMatrix(Double... custoVariavel) {
         for (int column = 1; column < columns; column++) {
-            if (column < quantVariaveis + 1) {
+            if (column < variables + 1) {
                 matrix[1][column] = new BigDecimal(custoVariavel[column - 1]).multiply(BigDecimal.valueOf(1l).negate());
             } else {
                 matrix[1][column] = new BigDecimal(0);
@@ -82,16 +90,22 @@ public class SimplexMatrix {
         }
     }
 
-    public void setCoeficientesRestricoes(Float... coeficiente) {
+    private void insertCoeficientesRestricoesOnMatrix(Double... coeficiente) {
         int count = 0;
-        for (int row = 2; row < (quantFolgas + 2); row++) {
+        for (int row = 2; row < (clearances + 2); row++) {
             for (int column = 1; column < (columns - 1); column++) {
-                if (column < quantVariaveis + 1) {
+                if (column < variables + 1) {
                     matrix[row][column] = new BigDecimal(coeficiente[count++]);
                 } else {
-                    matrix[row][column] = new BigDecimal(column == (quantVariaveis + row - 1) ? 1 : 0);
+                    matrix[row][column] = new BigDecimal(column == (variables + row - 1) ? 1 : 0);
                 }
             }
+        }
+    }
+
+    private void insertDemandasOnMatrix(Double... demanda) {
+        for (int row = 2; row < rows; row++) {
+            matrix[row][columns - 1] = new BigDecimal(demanda[row - 2]);
         }
     }
 
@@ -103,100 +117,73 @@ public class SimplexMatrix {
         return demandas;
     }
 
-    public void setDemandas(Float... demanda) {
-        for (int row = 2; row < rows; row++) {
-            matrix[row][columns - 1] = new BigDecimal(demanda[row - 2]);
-        }
+    public String getPivotColumnLabel() {
+        return matrix[0][pivotColumn].toString();
     }
 
-    private String getPivotColumn() {
-        return String.format("X%s", pivotColumn);
+    public String getPivotLineLabel() {
+        return matrix[pivotLine][0].toString();
     }
 
-    private String getPivotLine() {
-        return String.format("F%s", pivotLine);
-    }
-
-    private BigDecimal findPivotColumnValue() {
-        pivotColumnValue = BigDecimal.valueOf(0l);
-        for (int column = 1; column < quantVariaveis + 1; column++) {
-            if (pivotColumnValue.floatValue() > ((BigDecimal) this.matrix[1][column]).floatValue()) {
-                pivotColumn = column;
-                pivotColumnValue = (BigDecimal) this.matrix[1][column];
-            }
-        }
-        return pivotColumnValue;
-    }
-
-    private BigDecimal findPivotLineValue() {
-        findPivotColumnValue();
-        BigDecimal[] demandas = getDemandas();
-        for (int d = 2; d < demandas.length; d++) {
-            BigDecimal value = (BigDecimal) matrix[d][pivotColumn];
-            if (value.floatValue() != 0.000f) {
-                BigDecimal divide = demandas[d - 1].divide(value, 2, RoundingMode.HALF_EVEN);
-                if (pivotLineValue == null) {
-                    pivotLine = d;
-                    pivotNumber = value;
-                    pivotLineValue = divide;
-                }
-                if (pivotLineValue.floatValue() > divide.floatValue()) {
-                    pivotLine = d;
-                    pivotNumber = value;
-                    pivotLineValue = divide;
-                }
-            }
-        }
-        return pivotLineValue;
-    }
-
-    private BigDecimal[] findNewLine() {
-        for (int column = 1; column < columns; column++) {
-            newLine[column - 1] = ((BigDecimal) matrix[pivotLine][column]).divide(pivotNumber, 2, RoundingMode.HALF_EVEN);
-        }
-        return newLine;
-    }
-
-    /**
-     * Linha Antiga - (CP * NLP) + valor linha
-     *
-     * @return
-     */
-    private Object[][] recaluleMatrix() {
-        Object[][] newMatrix = Arrays.copyOf(matrix, matrix.length);
-        for (int row = 1; row < rows; row++) {
-            BigDecimal baseNumber = ((BigDecimal) matrix[row][pivotColumn]).multiply(BigDecimal.ONE.negate());
-            if (row == pivotLine) newMatrix[row][0] = getPivotColumn();
-            for (int column = 1; column < columns; column++) {
-                if (row == pivotLine) {
-                    newMatrix[row][column] = newLine[column - 1];
-                } else {
-                    newMatrix[row][column] = baseNumber.multiply(newLine[column - 1]).add((BigDecimal) matrix[row][column]);
-                }
-            }
-        }
-        System.out.println(printUtil.stringCabecalho()
-                + printUtil.stringProblemaProgramacaoLinear(newMatrix)
-                + printUtil.stringRestricoes(newMatrix));
-
-        while (matrixUtil.zRowContainNegativeNumber(newMatrix)) {
-            SimplexMatrix simplexMatrix = new SimplexMatrix(newMatrix, quantVariaveis, quantFolgas);
-            newMatrix = simplexMatrix.executeCalcules();
-            System.out.println(simplexMatrix.toString());
-        }
+    public Object[][] calculateNewMatrix() {
+        MatrixUtil.calculetePPLWithSimplexAlgorithm(this);
         return newMatrix;
+    }
+
+    public String matrixToString() {
+        String matrixString = "\nTabela razão:\n%s\n";
+        if (matrix[1][1] != null) {
+            return String.format(matrixString, PrintUtil.matrixSimplexToString(matrix));
+        }
+        return String.format(matrixString, "Tabela vazia");
+    }
+
+    public String keyValuesToString() {
+        String keyValues = "\nColuna Pivô: %s => %s\nLinha Pivô: %s => %s\nNúmero Pivô: %s\n";
+        if (pivotColumnValue != null && pivotLineValue != null && pivotNumber != null) {
+            return String.format(keyValues,
+                    getPivotColumnLabel(),
+                    pivotColumnValue,
+                    getPivotLineLabel(),
+                    pivotLineValue,
+                    pivotNumber
+            );
+        }
+        return "\nOs valores chaves ainda não foram encontrados\n";
+    }
+
+    public String newLineToString() {
+        String newLineToString = "\nNova Linha (Linha Pivô/Número Pivô):\n%s\n";
+        if (newLine[0] != null) {
+            return String.format(newLineToString, PrintUtil.newLineToString(this));
+        }
+        return String.format(newLineToString, "Os calculos não foram realizados.");
+    }
+
+    public String newMatrixToString() {
+        String newMatrixString = "\nTabela Calculada com o algoritimo simplex: \n%s\n";
+        if (newMatrix != null) {
+            return String.format(newMatrixString, PrintUtil.matrixSimplexToString(newMatrix));
+        }
+        return String.format(newMatrixString, "Os calculos não foram realizados.");
+    }
+
+    public String resultTableToString() {
+        String resultString = "\nTabela de resultados: \n%s\n";
+        if (resultTable != null) {
+            return String.format(resultString, PrintUtil.resultTableToString(resultTable));
+        }
+        return String.format(resultString, "A tabela de resultados ainda não foi criada");
     }
 
     @Override
     public String toString() {
-        return String.format("Tabela razão:\n%s\n\nColuna Pivô: %s => %s\nLinha Pivô: %s => %s\nNúmero Pivô: %s\n\nNova Linha (Linha Pivô/Número Pivô):\n%s",
-                printUtil.stringCabecalho() + printUtil.stringProblemaProgramacaoLinear(matrix) + printUtil.stringRestricoes(matrix),
-                getPivotColumn(),
-                pivotColumnValue,
-                getPivotLine(),
-                pivotLineValue,
-                pivotNumber,
-                printUtil.stringNewLine(newLine, getPivotColumn())
+        return String.format("%s%s%s%s%s",
+                matrixToString(),
+                keyValuesToString(),
+                newLineToString(),
+                newMatrixToString(),
+                resultTableToString()
         );
     }
 
